@@ -20,7 +20,7 @@ class SpinChainParameters:
 
     # g-factor
     g_factors: np.ndarray | float = 0.2
-
+    
     # Optional multiplicative disorder
     exchange_disorder: np.ndarray | None = None
 
