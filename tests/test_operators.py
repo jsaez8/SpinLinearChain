@@ -1,7 +1,4 @@
 import numpy as np
-import pytest
-
-import numpy as np
 from qutip import qeye, sigmax, sigmay, sigmaz, tensor
 
 from spin_linear_chain.operators import build_spin_operators
