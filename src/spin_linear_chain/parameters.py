@@ -36,7 +36,7 @@ def default_spin_chain_params(
     delta_STmin: float = 0.0,
     model: str = "Heisenberg",
 ) -> SpinChainParameters:
-    """Build SpinChainParameters with near-uniform g-factors (avoids exact degeneracy)."""
+    """Build SpinChainParameters with uniform g-factors."""
 
     return SpinChainParameters(
         n_sites=n_sites,
@@ -44,7 +44,7 @@ def default_spin_chain_params(
         delta=delta,
         magnetic_field=magnetic_field,
         delta_STmin=delta_STmin,
-        g_factors=np.random.uniform(0.2, 0.2000001, n_sites),
+        g_factors=np.full(n_sites, 0.2),
         exchange_disorder=None,
         model=model,
     )
