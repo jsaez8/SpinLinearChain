@@ -60,9 +60,12 @@ def test_magnetic_field_term():
     energy_scale = MU_B / PLANCK * 1e-6
 
     operators = build_spin_operators(params.n_sites)
-
     actual = build_spin_chain(params, operators)
-    expected =  -0.5 * params.g_factors[0] * energy_scale * 0.01 * operators.sz[0] - 0.5 * params.g_factors[1] * energy_scale * 0.01 * operators.sz[1]
+    
+    expected =  -0.5* energy_scale * 0.01 * (
+                params.g_factors[0] * operators.sz[0] +
+                params.g_factors[1] * operators.sz[1]
+               )
     assert (actual - expected).norm() < 1e-12
 
 def test_dimerization_term():
