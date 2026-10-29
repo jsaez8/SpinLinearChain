@@ -70,73 +70,73 @@ def compute_total_magnetization(
 
     return magnetization
 
-# def compute_local_magnetization(
-#     ground_states,
-#     n_sites,
-# ):
-#     """
-#     Compute local magnetization <Sz_i> for every site
-#     and every value of the swept parameter.
+def compute_local_magnetization(
+    ground_states,
+    n_sites,
+):
+    """
+    Compute local magnetization <Sz_i> for every site
+    and every value of the swept parameter.
 
-#     Parameters
-#     ----------
-#     ground_states : array of qutip.Qobj
-#         Ground state for each value of the swept parameter.
+    Parameters
+    ----------
+    ground_states : array of qutip.Qobj
+        Ground state for each value of the swept parameter.
 
-#         Shape:
-#             (n_points,)
+        Shape:
+            (n_points,)
 
-#     n_sites : int
-#         Number of spins in the chain.
+    n_sites : int
+        Number of spins in the chain.
 
-#     Returns
-#     -------
-#     local_magnetization : ndarray
+    Returns
+    -------
+    local_magnetization : ndarray
 
-#         Shape:
-#             (n_sites, n_points)
+        Shape:
+            (n_sites, n_points)
 
-#         local_magnetization[i, j]
-#         corresponds to <Sz_i> at parameter point j.
-#     """
+        local_magnetization[i, j]
+        corresponds to <Sz_i> at parameter point j.
+    """
 
-#     n_points = len(ground_states)
+    n_points = len(ground_states)
 
-#     local_magnetization = np.zeros(
-#         (n_sites, n_points)
-#     )
-
-
-#     # --------------------------------------------------------
-#     # Calculate <Sz_i> for every site
-#     # --------------------------------------------------------
-
-#     for site in range(n_sites):
-
-#         # Build local Sz operator
-#         op_list = [
-#             qeye(2)
-#         ] * n_sites
-
-#         op_list[site] = 0.5 * sigmaz()
-
-#         sz_operator = tensor(
-#             op_list
-#         )
+    local_magnetization = np.zeros(
+        (n_sites, n_points)
+    )
 
 
-#         # Expectation value along sweep
-#         for idx, state in enumerate(ground_states):
+    # --------------------------------------------------------
+    # Calculate <Sz_i> for every site
+    # --------------------------------------------------------
 
-#             local_magnetization[site, idx] = np.real(
-#                 expect(
-#                     sz_operator,
-#                     state,
-#                 )
-#             )
+    for site in range(n_sites):
+
+        # Build local Sz operator
+        op_list = [
+            qeye(2)
+        ] * n_sites
+
+        op_list[site] = 0.5 * sigmaz()
+
+        sz_operator = tensor(
+            op_list
+        )
 
 
-#     return local_magnetization
+        # Expectation value along sweep
+        for idx, state in enumerate(ground_states):
+
+            local_magnetization[site, idx] = np.real(
+                expect(
+                    sz_operator,
+                    state,
+                )
+            )
+
+
+    return local_magnetization
 
 
 # # ============================================================
