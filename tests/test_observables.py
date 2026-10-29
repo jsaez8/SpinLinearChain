@@ -38,4 +38,17 @@ def test_local_magnetization():
 
     local_magnetization_updown = compute_local_magnetization([state_updown], n_sites)
     assert np.allclose(local_magnetization_updown[:, 0], [0.5, -0.5])
-    
+
+def test_local_magnetization_shape():
+    n_sites = 3
+
+    basis_up = basis(2, 0)
+    basis_down = basis(2, 1)
+
+    state_upupup = tensor([basis_up] * n_sites)
+    state_downdowndown = tensor([basis_down] * n_sites)
+
+    local_magnetization = compute_local_magnetization([state_upupup, state_downdowndown], n_sites)
+
+    assert local_magnetization.shape == (n_sites, 2)
+    assert local_magnetization[:, 0].shape[0] == n_sites
