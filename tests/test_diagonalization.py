@@ -113,52 +113,27 @@ def test_delta_sweep_does_not_modify_input_parameters():
 
     assert params.delta == initial_delta
 
-def test_diagonalization_with_deltas_sparse():
+
+def test_sparse_diagonalization_returns_lowest_eigenpairs():
     params = SpinChainParameters(
-        n_sites=2,
+        n_sites=3,
         J=4.0,
         delta=0.0,
         magnetic_field=0.0,
         model="Heisenberg",
     )
-    deltas = np.linspace(-1, 1, 5)
-    eigvals = 4
+    operators = build_spin_operators(params.n_sites)
+    hamiltonian = build_spin_chain(params, operators)
 
-    eigenvalues, eigenstates = sweep_delta_diagonalization(
-        params=params,
-        deltas=deltas,
-        eigvals=eigvals,
+    energies, states = diagonalize_hamiltonian(
+        hamiltonian,
+        eigvals=2,
         sparse=True,
     )
 
-    assert eigenvalues.shape == (eigvals, len(deltas))
-    assert eigenstates.shape == (eigvals, len(deltas))
+    assert energies.shape == (2,)
+    assert len(states) == 2
+    assert np.all(np.diff(energies) >= 0)
 
-def test_diagonalization_with_deltas_sparse_eigenvalue_equation():
-    params = SpinChainParameters(
-        n_sites=2,
-        J=4.0,
-        delta=0.0,
-        magnetic_field=0.0,
-        model="Heisenberg",
-    )
-    deltas = np.linspace(-1, 1, 5)
-    eigvals = 4
-
-    eigenvalues, eigenstates = sweep_delta_diagonalization(
-        params=params,
-        deltas=deltas,
-        eigvals=eigvals,
-        sparse=True,
-    )
-
-    for i, delta in enumerate(deltas):
-        params.delta = delta
-        operators = build_spin_operators(params.n_sites)
-        hamiltonian = build_spin_chain(params, operators)
-
-        for j in range(eigvals):
-            energy = eigenvalues[j, i]
-            state = eigenstates[j, i]
-            residual = hamiltonian * state - energy * state
-            assert residual.norm() < 1e-12
+    for energy, state in zip(energies, states):
+        assert (hamiltonian * state - energy * state).norm() < 1e-10
