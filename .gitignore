@@ -17,3 +17,6 @@ outputs/
 
 # Package build metadata
 *.egg-info/
+
+# Placeholder for functions not yet being migrated
+src/spin_linear_chain/tobeimplemented.py

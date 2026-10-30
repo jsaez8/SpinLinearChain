@@ -84,7 +84,6 @@ def test_concurrence_chain():
 
     expected_partial = 2 * 0.2 / (1 + 0.2**2)
 
-    expected_partial = 2 * 0.2 / (1 + 0.2**2)
     np.testing.assert_allclose(
         concurrences,
         [0.0, 1.0, expected_partial],
