@@ -3,8 +3,7 @@ Calculation of physical observables for spin chains.
 """
 
 import numpy as np
-from qutip import sigmax, sigmay, sigmaz, tensor, qeye, expect
-import qutip
+from qutip import expect, qeye, sigmay, sigmaz, tensor
 
 # ============================================================
 # Magnetization

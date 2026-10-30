@@ -1,9 +1,9 @@
 import numpy as np
 
+from spin_linear_chain.diagonalization import diagonalize_hamiltonian
 from spin_linear_chain.hamiltonians import build_spin_chain
 from spin_linear_chain.operators import build_spin_operators
 from spin_linear_chain.parameters import SpinChainParameters
-from spin_linear_chain.diagonalization import diagonalize_hamiltonian
 
 
 def test_two_site_heisenberg_energies_are_sorted_and_correct():

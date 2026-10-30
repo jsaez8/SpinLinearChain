@@ -1,7 +1,7 @@
 import numpy as np
-import pytest
 
 from spin_linear_chain.parameters import default_spin_chain_params
+
 
 def test_default_params():
     

@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from qutip import tensor, qeye, sigmax, sigmay, sigmaz
+from qutip import qeye, sigmax, sigmay, sigmaz, tensor
 
 
 @dataclass

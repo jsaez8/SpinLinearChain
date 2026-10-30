@@ -1,9 +1,9 @@
 import numpy as np
 from tqdm import tqdm
 
-from .parameters import SpinChainParameters
-from .operators import SpinOperators, build_spin_operators
 from .hamiltonians import build_spin_chain
+from .operators import build_spin_operators
+from .parameters import SpinChainParameters
 
 
 def diagonalize_hamiltonian(

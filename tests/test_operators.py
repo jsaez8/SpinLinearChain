@@ -3,6 +3,7 @@ from qutip import qeye, sigmax, sigmay, sigmaz, tensor
 
 from spin_linear_chain.operators import build_spin_operators
 
+
 def test_number_operators():
 
     n_sites = 2

@@ -1,12 +1,10 @@
+import numpy as np
+import scipy.constants
+from scipy.constants import eV, physical_constants
+
 from spin_linear_chain.hamiltonians import build_spin_chain
 from spin_linear_chain.operators import build_spin_operators
 from spin_linear_chain.parameters import SpinChainParameters
-
-import numpy as np
-
-import scipy.constants
-from scipy.constants import physical_constants, eV
-
 
 MU_B = physical_constants["Bohr magneton"][0] / eV
 PLANCK = scipy.constants.h / eV

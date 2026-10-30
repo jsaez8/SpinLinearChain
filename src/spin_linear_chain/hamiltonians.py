@@ -1,10 +1,8 @@
 import numpy as np
+import scipy.constants
+from scipy.constants import eV, physical_constants
 
 from .couplings import alternating_couplings
-
-import scipy.constants
-from scipy.constants import physical_constants, eV
-
 
 MU_B = physical_constants["Bohr magneton"][0] / eV
 PLANCK = scipy.constants.h / eV
