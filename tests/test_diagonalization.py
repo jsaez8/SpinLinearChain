@@ -112,3 +112,53 @@ def test_delta_sweep_does_not_modify_input_parameters():
     )
 
     assert params.delta == initial_delta
+
+def test_diagonalization_with_deltas_sparse():
+    params = SpinChainParameters(
+        n_sites=2,
+        J=4.0,
+        delta=0.0,
+        magnetic_field=0.0,
+        model="Heisenberg",
+    )
+    deltas = np.linspace(-1, 1, 5)
+    eigvals = 4
+
+    eigenvalues, eigenstates = sweep_delta_diagonalization(
+        params=params,
+        deltas=deltas,
+        eigvals=eigvals,
+        sparse=True,
+    )
+
+    assert eigenvalues.shape == (eigvals, len(deltas))
+    assert eigenstates.shape == (eigvals, len(deltas))
+
+def test_diagonalization_with_deltas_sparse_eigenvalue_equation():
+    params = SpinChainParameters(
+        n_sites=2,
+        J=4.0,
+        delta=0.0,
+        magnetic_field=0.0,
+        model="Heisenberg",
+    )
+    deltas = np.linspace(-1, 1, 5)
+    eigvals = 4
+
+    eigenvalues, eigenstates = sweep_delta_diagonalization(
+        params=params,
+        deltas=deltas,
+        eigvals=eigvals,
+        sparse=True,
+    )
+
+    for i, delta in enumerate(deltas):
+        params.delta = delta
+        operators = build_spin_operators(params.n_sites)
+        hamiltonian = build_spin_chain(params, operators)
+
+        for j in range(eigvals):
+            energy = eigenvalues[j, i]
+            state = eigenstates[j, i]
+            residual = hamiltonian * state - energy * state
+            assert residual.norm() < 1e-12
