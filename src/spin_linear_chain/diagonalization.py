@@ -1,3 +1,5 @@
+from dataclasses import replace
+
 import numpy as np
 from tqdm import tqdm
 
@@ -121,12 +123,12 @@ def sweep_delta_diagonalization(
         tqdm(deltas, desc="Diagonalizing")
     ):
 
-        # Update parameter
-        params.delta = delta
+        # Use a per-sweep copy so the caller's parameters remain unchanged.
+        sweep_params = replace(params, delta=delta)
 
         # Build Hamiltonian
         hamiltonian = build_spin_chain(
-            params,
+            sweep_params,
             operators,
         )
 

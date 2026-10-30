@@ -92,3 +92,23 @@ def test_diagonalization_with_deltas_eigenvalue_equation():
             state = eigenstates[j, i]
             residual = hamiltonian * state - energy * state
             assert residual.norm() < 1e-12
+
+
+def test_delta_sweep_does_not_modify_input_parameters():
+    initial_delta = 0.25
+    params = SpinChainParameters(
+        n_sites=2,
+        J=4.0,
+        delta=initial_delta,
+        magnetic_field=0.0,
+        model="Heisenberg",
+    )
+
+    sweep_delta_diagonalization(
+        params=params,
+        deltas=np.array([-0.5, 0.0, 0.5]),
+        eigvals=2,
+        sparse=False,
+    )
+
+    assert params.delta == initial_delta
