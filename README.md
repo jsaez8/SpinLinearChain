@@ -1,7 +1,7 @@
 # SpinLinearChain
 
 ## Overview
-This project consists on simualting a linear chain of spins with Heisenberg interaction.
+This project consists of simulating a linear chain of spins with Heisenberg interaction.
 
 ## Goals
 Simulation of observables that can be measured experimentally by tuning the different parameters of the system.
@@ -34,7 +34,18 @@ python -m pytest -q
 The test suite checks the simulation components and expected physical behavior. Run it from the repository root after activating `.venv`.
 
 ## Project structure
-To be writen
+
+- `src/spin_linear_chain/` — installable Python package containing the simulation code.
+	- `parameters.py` — spin-chain parameter definitions and defaults.
+	- `couplings.py` — nearest-neighbour exchange couplings.
+	- `operators.py` — single-site spin operators.
+	- `hamiltonians.py` — spin-chain Hamiltonian construction.
+	- `diagonalization.py` — Hamiltonian eigensolvers and parameter sweeps.
+	- `observables.py` — magnetization and concurrence calculations.
+- `tests/` — pytest tests for the simulation components and expected physical results.
+- `examples/` — reserved for runnable example simulations; examples will be added as the API develops.
+- `outputs/` — generated simulation results (ignored by Git).
+- `pyproject.toml` — package metadata and runtime/development dependencies.
 
 ## Licence
 TO be decided
