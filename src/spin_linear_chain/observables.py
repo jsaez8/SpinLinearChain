@@ -6,9 +6,6 @@ import numpy as np
 from qutip import sigmax, sigmay, sigmaz, tensor, qeye, expect
 import qutip
 
-# import spin_chain_utils as scu
-
-
 # ============================================================
 # Magnetization
 # ============================================================
@@ -200,124 +197,30 @@ def compute_concurrence(
     return float(concurrence)
 
 
-# def compute_chain_concurrence(
-#     ground_states,
-#     spin_a,
-#     spin_b,
-# ):
-#     """
-#     Compute concurrence for all parameter values.
-#     """
+def compute_chain_concurrence(
+    ground_states,
+    spin_a,
+    spin_b,
+):
+    """
+    Compute concurrence for all parameter values.
+    """
 
-#     concurrence = np.zeros(
-#         len(ground_states)
-#     )
+    concurrence = np.zeros(
+        len(ground_states)
+    )
 
-#     for i, state in enumerate(
-#         ground_states
-#     ):
+    for i, state in enumerate(
+        ground_states
+    ):
 
-#         concurrence[i] = compute_concurrence(
-#             state,
-#             spin_a,
-#             spin_b,
-#         )
+        concurrence[i] = compute_concurrence(
+            state,
+            spin_a,
+            spin_b,
+        )
 
-#     return concurrence
-
-
-# def compute_entanglement_of_formation(
-#     concurrence,
-# ):
-#     """
-#     Entanglement of formation for a two-qubit state, computed from
-#     its concurrence (Wootters' formula):
-
-#         E_F = h( (1 + sqrt(1 - C^2)) / 2 )
-
-#     with h(x) = -x*log2(x) - (1-x)*log2(1-x) the binary entropy.
-
-#     Parameters
-#     ----------
-#     concurrence : float or ndarray
-#         Concurrence value(s), in [0, 1].
-
-#     Returns
-#     -------
-#     entanglement_of_formation : float or ndarray
-#         Same shape as `concurrence`.
-#     """
-
-#     concurrence = np.asarray(concurrence)
-
-#     x = (
-#         1 + np.sqrt(1 - concurrence**2)
-#     ) / 2
-
-#     # Binary entropy h(x), with the 0*log2(0) = 0 convention
-#     with np.errstate(divide="ignore", invalid="ignore"):
-
-#         entanglement_of_formation = np.where(
-#             (x <= 0) | (x >= 1),
-#             0.0,
-#             -x * np.log2(x) - (1 - x) * np.log2(1 - x),
-#         )
-
-#     return entanglement_of_formation
-
-
-# def compute_negativity(
-#     state,
-#     spin_a,
-#     spin_b,
-# ):
-#     """
-#     Compute the negativity between two spins in a many-body state.
-
-#     The negativity is obtained from the reduced two-spin density
-#     matrix via the partial transpose (Peres-Horodecki criterion):
-#     it is nonzero if and only if the pair is entangled, ranging from
-#     0 (separable) to 0.5 (maximally entangled, for two qubits).
-#     """
-
-#     rho = state.proj()
-
-#     rho_ab = rho.ptrace(
-#         [spin_a, spin_b]
-#     )
-
-#     return float(
-#         qutip.negativity(
-#             rho_ab,
-#             0,
-#         )
-#     )
-
-
-# def compute_chain_negativity(
-#     ground_states,
-#     spin_a,
-#     spin_b,
-# ):
-#     """
-#     Compute negativity for all values of the swept parameter.
-#     """
-
-#     negativity = np.zeros(
-#         len(ground_states)
-#     )
-
-#     for i, state in enumerate(
-#         ground_states
-#     ):
-
-#         negativity[i] = compute_negativity(
-#             state,
-#             spin_a,
-#             spin_b,
-#         )
-
-#     return negativity
+    return concurrence
 
 
 # # ============================================================
@@ -875,3 +778,96 @@ def compute_concurrence(
 #         order_parameter,
 #         order_parameter_labels,
 #     )
+
+# def compute_entanglement_of_formation(
+#     concurrence,
+# ):
+#     """
+#     Entanglement of formation for a two-qubit state, computed from
+#     its concurrence (Wootters' formula):
+
+#         E_F = h( (1 + sqrt(1 - C^2)) / 2 )
+
+#     with h(x) = -x*log2(x) - (1-x)*log2(1-x) the binary entropy.
+
+#     Parameters
+#     ----------
+#     concurrence : float or ndarray
+#         Concurrence value(s), in [0, 1].
+
+#     Returns
+#     -------
+#     entanglement_of_formation : float or ndarray
+#         Same shape as `concurrence`.
+#     """
+
+#     concurrence = np.asarray(concurrence)
+
+#     x = (
+#         1 + np.sqrt(1 - concurrence**2)
+#     ) / 2
+
+#     # Binary entropy h(x), with the 0*log2(0) = 0 convention
+#     with np.errstate(divide="ignore", invalid="ignore"):
+
+#         entanglement_of_formation = np.where(
+#             (x <= 0) | (x >= 1),
+#             0.0,
+#             -x * np.log2(x) - (1 - x) * np.log2(1 - x),
+#         )
+
+#     return entanglement_of_formation
+
+
+# def compute_negativity(
+#     state,
+#     spin_a,
+#     spin_b,
+# ):
+#     """
+#     Compute the negativity between two spins in a many-body state.
+
+#     The negativity is obtained from the reduced two-spin density
+#     matrix via the partial transpose (Peres-Horodecki criterion):
+#     it is nonzero if and only if the pair is entangled, ranging from
+#     0 (separable) to 0.5 (maximally entangled, for two qubits).
+#     """
+
+#     rho = state.proj()
+
+#     rho_ab = rho.ptrace(
+#         [spin_a, spin_b]
+#     )
+
+#     return float(
+#         qutip.negativity(
+#             rho_ab,
+#             0,
+#         )
+#     )
+
+
+# def compute_chain_negativity(
+#     ground_states,
+#     spin_a,
+#     spin_b,
+# ):
+#     """
+#     Compute negativity for all values of the swept parameter.
+#     """
+
+#     negativity = np.zeros(
+#         len(ground_states)
+#     )
+
+#     for i, state in enumerate(
+#         ground_states
+#     ):
+
+#         negativity[i] = compute_negativity(
+#             state,
+#             spin_a,
+#             spin_b,
+#         )
+
+#     return negativity
