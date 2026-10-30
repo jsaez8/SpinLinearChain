@@ -1,7 +1,7 @@
 import numpy as np
 
 from spin_linear_chain.observables import compute_total_magnetization, compute_local_magnetization
-
+from spin_linear_chain.observables import compute_concurrence
 from qutip import basis, tensor
 
 def test_total_magnetization():
@@ -52,3 +52,17 @@ def test_local_magnetization_shape():
 
     assert local_magnetization.shape == (n_sites, 2)
     assert local_magnetization[:, 0].shape[0] == n_sites
+
+def test_concurrence():
+    product_state = tensor(basis(2, 0), basis(2, 0))
+    entangled_state = (tensor(basis(2, 0), basis(2, 1)) + tensor(basis(2, 1), basis(2, 0))).unit()
+    partially_entangled_state = (0.2*tensor(basis(2, 0), basis(2, 1)) + tensor(basis(2, 1), basis(2, 0))).unit()
+    
+
+    concurrence_product = compute_concurrence(product_state, 0, 1)
+    concurrence_entangled = compute_concurrence(entangled_state, 0, 1)
+    concurrence_partially_entangled = compute_concurrence(partially_entangled_state, 0, 1)
+    assert np.isclose(concurrence_product, 0.0)
+    assert np.isclose(concurrence_entangled, 1.0)
+    assert np.isclose(concurrence_partially_entangled, 0.4, atol=1)
+    

@@ -139,65 +139,65 @@ def compute_local_magnetization(
     return local_magnetization
 
 
-# # ============================================================
-# # Concurrence
-# # ============================================================
+# ============================================================
+# Concurrence
+# ============================================================
 
-# def compute_concurrence(
-#     state,
-#     spin_a,
-#     spin_b,
-# ):
-#     """
-#     Compute concurrence between two spins.
-#     """
+def compute_concurrence(
+    state,
+    spin_a,
+    spin_b,
+):
+    """
+    Compute concurrence between two spins.
+    """
 
-#     rho = state.proj()
+    rho = state.proj()
 
-#     rho_ab = rho.ptrace(
-#         [spin_a, spin_b]
-#     )
+    rho_ab = rho.ptrace(
+        [spin_a, spin_b]
+    )
 
-#     sy = sigmay()
+    sy = sigmay()
 
-#     Y = tensor(
-#         sy,
-#         sy,
-#     )
+    Y = tensor(
+        sy,
+        sy,
+    )
 
-#     R = (
-#         rho_ab
-#         * Y
-#         * rho_ab.conj()
-#         * Y
-#     )
+    R = (
+        rho_ab
+        * Y
+        * rho_ab.conj()
+        * Y
+    )
 
-#     eigenvalues = np.real(
-#         R.eigenenergies()
-#     )
+    eigenvalues = np.real(
+        R.eigenenergies()
+    )
 
-#     eigenvalues = np.maximum(
-#         eigenvalues,
-#         0,
-#     )
+    eigenvalues = np.maximum(
+        eigenvalues,
+        0,
+    )
 
-#     lambdas = np.sqrt(
-#         eigenvalues
-#     )
+    lambdas = np.sqrt(
+        eigenvalues
+    )
 
-#     lambdas = np.sort(
-#         lambdas
-#     )[::-1]
+    lambdas = np.sort(
+        lambdas
+    )[::-1]
 
-#     concurrence = max(
-#         0,
-#         lambdas[0]
-#         - lambdas[1]
-#         - lambdas[2]
-#         - lambdas[3],
-#     )
+    concurrence = max(
+        0,
+        lambdas[0]
+        - lambdas[1]
+        - lambdas[2]
+        - lambdas[3],
+    )
 
-#     return float(concurrence)
+    return float(concurrence)
 
 
 # def compute_chain_concurrence(
