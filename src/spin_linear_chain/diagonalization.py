@@ -4,6 +4,7 @@ import numpy as np
 from tqdm import tqdm
 
 from .hamiltonians import build_spin_chain
+from .observables import compute_total_magnetization
 from .operators import build_spin_operators
 from .parameters import SpinChainParameters
 
@@ -59,7 +60,6 @@ def diagonalize_hamiltonian(
     energies = np.real(np.asarray(energies))
 
     return energies, states
-
 
 
 def sweep_delta_diagonalization(
@@ -144,3 +144,48 @@ def sweep_delta_diagonalization(
 
 
     return eigenvalues, eigenstates
+
+
+def run_delta_sweep(
+    params: SpinChainParameters,
+    deltas: np.ndarray | list[float],
+    eigvals: int = 1,
+    sparse: bool = False,
+) -> list[dict[str, float]]:
+    """Run a sweep over a parameter and return structured observables.
+
+    The function is intentionally a thin experiment-layer wrapper around the
+    stable core routines: it builds a Hamiltonian for each delta, diagonalizes
+    it, extracts the ground state, and reports scalar observables useful for
+    plots or summary tables.
+    """
+
+    delta_values = np.asarray(deltas, dtype=float)
+    operators = build_spin_operators(params.n_sites)
+    results: list[dict[str, float]] = []
+
+    for delta in delta_values:
+        sweep_params = replace(params, delta=float(delta))
+        hamiltonian = build_spin_chain(sweep_params, operators)
+
+        energies, states = diagonalize_hamiltonian(
+            hamiltonian,
+            eigvals=eigvals,
+            sparse=sparse,
+        )
+
+        ground_state = states[0]
+        total_magnetization = compute_total_magnetization(
+            [ground_state],
+            sweep_params.n_sites,
+        )[0]
+
+        results.append(
+            {
+                "delta": float(delta),
+                "ground_energy": float(energies[0]),
+                "total_magnetization": float(total_magnetization),
+            }
+        )
+
+    return results

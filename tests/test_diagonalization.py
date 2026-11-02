@@ -2,6 +2,7 @@ import numpy as np
 
 from spin_linear_chain.diagonalization import (
     diagonalize_hamiltonian,
+    run_delta_sweep,
     sweep_delta_diagonalization,
 )
 from spin_linear_chain.hamiltonians import build_spin_chain
@@ -112,6 +113,29 @@ def test_delta_sweep_does_not_modify_input_parameters():
     )
 
     assert params.delta == initial_delta
+
+
+def test_run_delta_sweep_returns_structured_results():
+    params = SpinChainParameters(
+        n_sites=2,
+        J=4.0,
+        delta=0.0,
+        magnetic_field=0.0,
+        model="Heisenberg",
+    )
+
+    results = run_delta_sweep(
+        params=params,
+        deltas=np.array([-1.0, 0.0, 1.0]),
+        eigvals=1,
+        sparse=False,
+    )
+
+    assert len(results) == 3
+    assert all(set(item) >= {"delta", "ground_energy", "total_magnetization"} for item in results)
+    assert [item["delta"] for item in results] == [-1.0, 0.0, 1.0]
+    assert np.all(np.isfinite([item["ground_energy"] for item in results]))
+    assert np.all(np.isfinite([item["total_magnetization"] for item in results]))
 
 
 def test_sparse_diagonalization_returns_lowest_eigenpairs():
