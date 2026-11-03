@@ -11,7 +11,7 @@ from spin_linear_chain.plotting import (
 from spin_linear_chain.sweeps import run_delta_sweep, run_magnetic_field_sweep
 
 spin_chain_params = SpinChainParameters(
-    n_sites=4,
+    n_sites=8,
     delta=0.1,
     J=10.0,
     magnetic_field=0.005
