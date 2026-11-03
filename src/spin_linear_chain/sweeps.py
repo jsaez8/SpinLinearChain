@@ -1,4 +1,4 @@
-from dataclasses import replace
+from dataclasses import dataclass, replace
 
 import numpy as np
 
@@ -9,13 +9,27 @@ from .operators import build_spin_operators
 from .parameters import SpinChainParameters
 
 
+@dataclass
+class SweepResults:
+    """Numerical results from a one-parameter sweep.
+
+    The first axis of each array corresponds to ``parameter_values``.
+    """
+
+    parameter_name: str
+    parameter_values: np.ndarray
+    eigenvalues: np.ndarray
+    total_magnetizations: np.ndarray
+    local_magnetizations: np.ndarray
+
+
 def run_delta_sweep(
     params: SpinChainParameters,
     deltas: np.ndarray | list[float],
-    eigvals: int = 1,
+    eigvals: int = 0,
     sparse: bool = False,
-) -> list[dict[str, float]]:
-    """Run a sweep over a parameter and return structured observables.
+) -> SweepResults:
+    """Run a delta sweep and return structured observables.
 
     The function is intentionally a thin experiment-layer wrapper around the
     stable core routines: it builds a Hamiltonian for each delta, diagonalizes
@@ -25,7 +39,9 @@ def run_delta_sweep(
 
     delta_values = np.asarray(deltas, dtype=float)
     operators = build_spin_operators(params.n_sites)
-    results: list[dict[str, float]] = []
+    eigenvalue_rows = []
+    total_magnetizations = []
+    local_magnetization_rows = []
 
     for delta in delta_values:
         sweep_params = replace(params, delta=float(delta))
@@ -48,24 +64,25 @@ def run_delta_sweep(
             sweep_params.n_sites,
         )
 
-        results.append(
-            {
-                "delta": float(delta),
-                "ground_energy": float(energies[0]),
-                "total_magnetization": float(total_magnetization),
-                "local_magnetizations": local_magnetizations,
-            }
-        )
+        eigenvalue_rows.append(energies)
+        total_magnetizations.append(total_magnetization)
+        local_magnetization_rows.append(local_magnetizations[:, 0])
 
-    return results
+    return SweepResults(
+        parameter_name="delta",
+        parameter_values=delta_values,
+        eigenvalues=np.asarray(eigenvalue_rows),
+        total_magnetizations=np.asarray(total_magnetizations),
+        local_magnetizations=np.asarray(local_magnetization_rows),
+    )
 
 def run_magnetic_field_sweep(
     params: SpinChainParameters,
     magnetic_fields: np.ndarray | list[float],
-    eigvals: int = 1,
+    eigvals: int = 0,
     sparse: bool = False,
-) -> list[dict[str, float]]:
-    """Run a sweep over a parameter and return structured observables.
+) -> SweepResults:
+    """Run a magnetic-field sweep and return structured observables.
 
     The function is intentionally a thin experiment-layer wrapper around the
     stable core routines: it builds a Hamiltonian for each delta, diagonalizes
@@ -75,7 +92,9 @@ def run_magnetic_field_sweep(
 
     magnetic_field_values = np.asarray(magnetic_fields, dtype=float)
     operators = build_spin_operators(params.n_sites)
-    results: list[dict[str, float]] = []
+    eigenvalue_rows = []
+    total_magnetizations = []
+    local_magnetization_rows = []
 
     for magnetic_field in magnetic_field_values:
         sweep_params = replace(params, magnetic_field=float(magnetic_field))
@@ -98,13 +117,14 @@ def run_magnetic_field_sweep(
             sweep_params.n_sites,
         )
 
-        results.append(
-            {
-                "magnetic_field": float(magnetic_field),
-                "ground_energy": float(energies[0]),
-                "total_magnetization": float(total_magnetization),
-                "local_magnetizations": local_magnetizations,
-            }
-        )
+        eigenvalue_rows.append(energies)
+        total_magnetizations.append(total_magnetization)
+        local_magnetization_rows.append(local_magnetizations[:, 0])
 
-    return results
+    return SweepResults(
+        parameter_name="magnetic_field",
+        parameter_values=magnetic_field_values,
+        eigenvalues=np.asarray(eigenvalue_rows),
+        total_magnetizations=np.asarray(total_magnetizations),
+        local_magnetizations=np.asarray(local_magnetization_rows),
+    )
