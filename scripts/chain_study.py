@@ -2,7 +2,12 @@
 import numpy as np
 
 from spin_linear_chain.parameters import SpinChainParameters
-from spin_linear_chain.plotting import plot_energy_spectrum, plot_total_magnetization, plot_local_magnetization, plot_local_magnetization_heatmap
+from spin_linear_chain.plotting import (
+    plot_energy_spectrum,
+    plot_local_magnetization,
+    plot_local_magnetization_heatmap,
+    plot_total_magnetization,
+)
 from spin_linear_chain.sweeps import run_delta_sweep, run_magnetic_field_sweep
 
 spin_chain_params = SpinChainParameters(
